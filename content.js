@@ -10,21 +10,29 @@
     overlay.style.width = '600px';
     overlay.style.height = '400px';
     overlay.style.background = 'rgba(255, 255, 255, 0)';
-    overlay.style.backdropFilter = 'brightness(100%)';
+    overlay.style.backdropFilter = 'brightness(160%)';
     overlay.style.zIndex = 10000;
     overlay.style.resize = 'both';
     overlay.style.overflow = 'auto';
     overlay.style.border = '4px solid transparent';
 overlay.style.borderImage = 'linear-gradient(45deg, #ff6ec4, #7873f5, #1fd1f9, #c3f584) 1';
-overlay.style.animation = 'borderPulse 4s linear infinite';
+// Animation will be toggled during drag mode
     overlay.style.cursor = 'default';
 
-    let isDragging = false;
+    let isDragging = true;
+  overlay.style.cursor = 'move';
+  overlay.style.animation = 'borderPulseFlashy 1.5s infinite linear';
 
     overlay.addEventListener('dblclick', function () {
-      isDragging = !isDragging;
-      overlay.style.cursor = isDragging ? 'move' : 'default';
-    });
+  isDragging = !isDragging;
+  overlay.style.cursor = isDragging ? 'move' : 'default';
+
+  if (isDragging) {
+    overlay.style.animation = 'borderPulseFlashy 1.5s infinite linear';
+  } else {
+    overlay.style.animation = 'none';
+  }
+});
 
     overlay.addEventListener('mousedown', function (e) {
       if (!isDragging) return;
@@ -47,10 +55,28 @@ overlay.style.animation = 'borderPulse 4s linear infinite';
 
     const style = document.createElement('style');
 style.innerHTML = `
-  @keyframes borderPulse {
-    0% { border-image-slice: 1; }
-    50% { border-image-slice: 1; transform: scale(1.01); }
-    100% { border-image-slice: 1; }
+  @keyframes borderPulseFlashy {
+    0% {
+      border-image-source: linear-gradient(45deg, #ff6ec4, #7873f5, #1fd1f9, #c3f584);
+      border-image-slice: 1;
+      transform: scale(1);
+    }
+    25% {
+      border-image-source: linear-gradient(90deg, #c3f584, #ff6ec4, #1fd1f9, #7873f5);
+      transform: scale(1.02);
+    }
+    50% {
+      border-image-source: linear-gradient(135deg, #7873f5, #1fd1f9, #c3f584, #ff6ec4);
+      transform: scale(1.04);
+    }
+    75% {
+      border-image-source: linear-gradient(180deg, #1fd1f9, #c3f584, #ff6ec4, #7873f5);
+      transform: scale(1.02);
+    }
+    100% {
+      border-image-source: linear-gradient(225deg, #ff6ec4, #7873f5, #1fd1f9, #c3f584);
+      transform: scale(1);
+    }
   }
 `;
 document.head.appendChild(style);
