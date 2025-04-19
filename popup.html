@@ -1,16 +1,25 @@
-
 <!DOCTYPE html>
 <html>
 <head>
   <style>
     body { font-family: sans-serif; padding: 10px; }
-    button { margin-top: 5px; }
+    button { margin-top: 5px; display: block; }
+    label { display: block; margin-top: 10px; }
   </style>
 </head>
 <body>
   <h4>Overlay Controls</h4>
   <button id="addOverlay">Add Overlay</button>
   <button id="removeOverlay">Remove Overlay</button>
+  <label>
+    Contrast:
+    <select id="contrastLevel">
+      <option value="none">Normal</option>
+      <option value="brightness(160%)">Bright</option>
+      <option value="invert(100%)">Invert</option>
+      <option value="contrast(200%)">High Contrast</option>
+    </select>
+  </label>
   <script src="popup.js"></script>
 </body>
 </html>
