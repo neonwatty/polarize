@@ -12,13 +12,22 @@
   <button id="addOverlay">Add Overlay</button>
   <button id="removeOverlay">Remove Overlay</button>
   <label>
-    Contrast:
+    Theme:
     <select id="contrastLevel">
-      <option value="none">Normal</option>
+      <option value="brightness(100%)">Normal</option>
       <option value="brightness(160%)">Bright</option>
-      <option value="invert(100%)">Invert</option>
       <option value="contrast(200%)">High Contrast</option>
+      <option value="grayscale(100%)">Monokai Style</option>
+      <option value="saturate(200%) hue-rotate(300deg)">Solarized Dark</option>
+      <option value="hue-rotate(180deg) contrast(150%)">Dracula Style</option>
+      <option value="brightness(110%) contrast(120%) saturate(120%)">Solarized Light</option>
+      <option value="sepia(10%) brightness(115%) contrast(105%)">GitHub Light</option>
+      <option value="brightness(130%) hue-rotate(20deg) saturate(110%)">VS Code Light</option>
     </select>
+  </label>
+  <label>
+    Invert Amount:
+    <input type="range" id="invertSlider" min="0" max="100" value="0">
   </label>
   <script src="popup.js"></script>
 </body>

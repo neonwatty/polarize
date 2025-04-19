@@ -9,12 +9,14 @@
     overlay.style.left = '100px';
     overlay.style.width = '600px';
     overlay.style.height = '400px';
-    overlay.style.background = 'rgba(255, 255, 255, 0.4)';
-    overlay.style.backdropFilter = 'brightness(160%)';
+    overlay.style.background = 'rgba(255, 255, 255, 0)';
+    overlay.style.backdropFilter = 'brightness(100%)';
     overlay.style.zIndex = 10000;
     overlay.style.resize = 'both';
     overlay.style.overflow = 'auto';
-    overlay.style.border = '1px dashed #888';
+    overlay.style.border = '4px solid transparent';
+overlay.style.borderImage = 'linear-gradient(45deg, #ff6ec4, #7873f5, #1fd1f9, #c3f584) 1';
+overlay.style.animation = 'borderPulse 4s linear infinite';
     overlay.style.cursor = 'default';
 
     let isDragging = false;
@@ -42,6 +44,16 @@
       document.addEventListener('mousemove', onMouseMove);
       document.addEventListener('mouseup', onMouseUp);
     });
+
+    const style = document.createElement('style');
+style.innerHTML = `
+  @keyframes borderPulse {
+    0% { border-image-slice: 1; }
+    50% { border-image-slice: 1; transform: scale(1.01); }
+    100% { border-image-slice: 1; }
+  }
+`;
+document.head.appendChild(style);
 
     document.body.appendChild(overlay);
   };
