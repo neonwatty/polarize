@@ -1,10 +1,107 @@
 (() => {
+  function injectPolarizeButton() {
+  const container = document.querySelector('.ytp-left-controls');
+  if (!container || document.getElementById('polarize-toggle')) return;
+
+  const btn = document.createElement('button');
+  btn.id = 'polarize-toggle';
+  btn.className = 'ytp-button';
+  btn.title = 'Toggle Polarize Controls';
+  btn.innerHTML = '<span style="font-weight: bold; font-size: 16px; color: white;">&lt;/&gt;</span>';
+
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.createOverlay();
+  });
+
+  btn.addEventListener('contextmenu', (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    const existing = document.getElementById('polarize-panel');
+    if (existing) {
+      existing.remove();
+      return;
+    }
+
+    const panel = document.createElement('div');
+    panel.id = 'polarize-panel';
+    const iconRect = btn.getBoundingClientRect();
+    panel.style.position = 'absolute';
+    panel.style.top = `${iconRect.bottom + 8}px`;
+    panel.style.left = `${iconRect.left}px`;
+    panel.style.background = 'rgba(30, 30, 30, 0.95)';
+    panel.style.padding = '12px 16px';
+    panel.style.borderRadius = '12px';
+    panel.style.border = '1px solid #555';
+    panel.style.color = 'white';
+    panel.style.zIndex = '10001';
+    panel.innerHTML = `
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <button id="polarize-add">Add Overlay</button>
+        <button id="polarize-remove">Remove Overlay</button>
+        <label>Theme:
+          <select id="polarize-theme">
+            <option value=\"none\">Normal</option>
+            <option value=\"brightness(160%)\">Bright</option>
+            <option value=\"contrast(200%)\">High Contrast</option>
+          </select>
+        </label>
+        <label>Invert:
+          <input type="range" id="polarize-invert" min="0" max="100" value="0" />
+        </label>
+      </div>
+    `;
+
+    setTimeout(() => {
+      document.getElementById('polarize-add')?.addEventListener('click', window.createOverlay);
+      document.getElementById('polarize-remove')?.addEventListener('click', window.removeOverlay);
+      document.getElementById('polarize-theme')?.addEventListener('change', (e) => {
+        window.updateOverlayTheme(e.target.value);
+      });
+      document.getElementById('polarize-invert')?.addEventListener('input', (e) => {
+        const overlay = document.getElementById('code-overlay');
+        if (overlay) {
+          const theme = document.getElementById('polarize-theme')?.value || '';
+          overlay.style.backdropFilter = `invert(${e.target.value}%) ${theme}`.trim();
+        }
+      });
+    }, { capture: true });
+
+    document.body.appendChild(panel);
+
+    function closePanelOnOutsideClick(e) {
+      if (!panel.contains(e.target) && e.target !== btn) {
+        panel.remove();
+        document.removeEventListener('click', closePanelOnOutsideClick);
+      }
+    }
+    setTimeout(() => {
+      document.addEventListener('click', closePanelOnOutsideClick);
+    }, 0);
+  });
+
+  container.appendChild(btn);
+}
+
+  function updateOverlayTheme(value) {
+    const overlay = document.getElementById('code-overlay');
+    if (overlay) overlay.style.backdropFilter = value;
+  }
+
+  window.updateOverlayTheme = updateOverlayTheme;
+
+  const ytReady = setInterval(() => {
+    if (document.querySelector('.ytp-left-controls')) {
+      injectPolarizeButton();
+      clearInterval(ytReady);
+    }
+  }, 500);
   window.createOverlay = function () {
     if (document.getElementById('code-overlay')) return;
 
     const overlay = document.createElement('div');
     overlay.id = 'code-overlay';
-    overlay.style.position = 'fixed';
+    overlay.style.position = 'sticky';
     overlay.style.top = '100px';
     overlay.style.left = '100px';
     overlay.style.width = '600px';
@@ -86,11 +183,10 @@ document.head.appendChild(style);
     // Create extract button
     const extractBtn = document.createElement('button');
     extractBtn.textContent = 'Extract Code';
-    extractBtn.style.position = 'fixed';
-    const overlayRect = overlay.getBoundingClientRect();
-    extractBtn.style.top = `${overlayRect.bottom + 4}px`;
-    extractBtn.style.left = `${overlayRect.right - 120}px`;
-    extractBtn.style.right = '10px';
+    extractBtn.style.position = 'absolute';
+    extractBtn.style.bottom = '4px';
+    extractBtn.style.left = '50%';
+    extractBtn.style.transform = 'translateX(-50%)';
     extractBtn.style.padding = '5px 10px';
     extractBtn.style.fontSize = '14px';
     extractBtn.style.fontWeight = '600';
@@ -103,21 +199,7 @@ document.head.appendChild(style);
     extractBtn.style.zIndex = '10001';
 
     // Defer button positioning until overlay is rendered
-    const positionExtractButton = () => {
-  const rect = overlay.getBoundingClientRect();
-  extractBtn.style.top = `${rect.bottom + 4}px`;
-  extractBtn.style.left = `${rect.left + rect.width / 2 - 45}px`;
-};
-
-requestAnimationFrame(positionExtractButton);
-
-// Reposition the extract button when the overlay is moved or resized
-const observer = new ResizeObserver(positionExtractButton);
-observer.observe(overlay);
-
-overlay.addEventListener('mousemove', () => {
-  if (isDragging) positionExtractButton();
-});
+    
 
     extractBtn.addEventListener('mouseenter', () => {
       extractBtn.style.backgroundImage = 'linear-gradient(135deg, #c3f584, #1fd1f9)';
@@ -137,7 +219,25 @@ overlay.addEventListener('mousemove', () => {
       extractBtn.style.transform = 'scale(1.05)';
     });
 
-    document.body.appendChild(extractBtn);
+    // Create close button
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = '×';
+    closeBtn.style.position = 'absolute';
+    closeBtn.style.top = '4px';
+    closeBtn.style.right = '6px';
+    closeBtn.style.fontSize = '18px';
+    closeBtn.style.color = '#fff';
+    closeBtn.style.background = 'transparent';
+    closeBtn.style.border = 'none';
+    closeBtn.style.cursor = 'pointer';
+    closeBtn.style.zIndex = '10002';
+
+    closeBtn.addEventListener('click', () => {
+      overlay.remove();
+    });
+
+    overlay.appendChild(closeBtn);
+    overlay.appendChild(extractBtn);
 
     overlay._extractBtn = extractBtn;
 
