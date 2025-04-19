@@ -9,7 +9,7 @@
     overlay.style.left = '100px';
     overlay.style.width = '600px';
     overlay.style.height = '400px';
-    overlay.style.background = 'rgba(255, 255, 255, 0)';
+    overlay.style.background = 'rgba(255, 255, 255, 0.4)';
     overlay.style.backdropFilter = 'brightness(160%)';
     overlay.style.zIndex = 10000;
     overlay.style.resize = 'both';
@@ -29,8 +29,10 @@ overlay.style.borderImage = 'linear-gradient(45deg, #ff6ec4, #7873f5, #1fd1f9, #
 
   if (isDragging) {
     overlay.style.animation = 'borderPulseFlashy 1.5s infinite linear';
+    overlay._extractBtn.style.display = 'none';
   } else {
     overlay.style.animation = 'none';
+    overlay._extractBtn.style.display = 'block';
   }
 });
 
@@ -81,11 +83,74 @@ style.innerHTML = `
 `;
 document.head.appendChild(style);
 
+    // Create extract button
+    const extractBtn = document.createElement('button');
+    extractBtn.textContent = 'Extract Code';
+    extractBtn.style.position = 'fixed';
+    const overlayRect = overlay.getBoundingClientRect();
+    extractBtn.style.top = `${overlayRect.bottom + 4}px`;
+    extractBtn.style.left = `${overlayRect.right - 120}px`;
+    extractBtn.style.right = '10px';
+    extractBtn.style.padding = '5px 10px';
+    extractBtn.style.fontSize = '14px';
+    extractBtn.style.fontWeight = '600';
+    extractBtn.style.backgroundImage = 'linear-gradient(135deg, #ff6ec4, #7873f5)';
+    extractBtn.style.transition = 'all 0.2s ease';
+    extractBtn.style.color = '#fff';
+    extractBtn.style.border = '1px solid #888';
+    extractBtn.style.borderRadius = '4px';
+    extractBtn.style.display = isDragging ? 'none' : 'block';
+    extractBtn.style.zIndex = '10001';
+
+    // Defer button positioning until overlay is rendered
+    const positionExtractButton = () => {
+  const rect = overlay.getBoundingClientRect();
+  extractBtn.style.top = `${rect.bottom + 4}px`;
+  extractBtn.style.left = `${rect.left + rect.width / 2 - 45}px`;
+};
+
+requestAnimationFrame(positionExtractButton);
+
+// Reposition the extract button when the overlay is moved or resized
+const observer = new ResizeObserver(positionExtractButton);
+observer.observe(overlay);
+
+overlay.addEventListener('mousemove', () => {
+  if (isDragging) positionExtractButton();
+});
+
+    extractBtn.addEventListener('mouseenter', () => {
+      extractBtn.style.backgroundImage = 'linear-gradient(135deg, #c3f584, #1fd1f9)';
+      extractBtn.style.transform = 'scale(1.1)';
+    });
+
+    extractBtn.addEventListener('mouseleave', () => {
+      extractBtn.style.backgroundImage = 'linear-gradient(135deg, #ff6ec4, #7873f5)';
+      extractBtn.style.transform = 'scale(1)';
+    });
+
+    extractBtn.addEventListener('mousedown', () => {
+      extractBtn.style.transform = 'scale(0.95)';
+    });
+
+    extractBtn.addEventListener('mouseup', () => {
+      extractBtn.style.transform = 'scale(1.05)';
+    });
+
+    document.body.appendChild(extractBtn);
+
+    overlay._extractBtn = extractBtn;
+
     document.body.appendChild(overlay);
   };
 
   window.removeOverlay = function () {
     const overlay = document.getElementById('code-overlay');
     if (overlay) overlay.remove();
+
+    const extractBtn = document.querySelector('button');
+    if (extractBtn && extractBtn.textContent === 'Extract Code') {
+      extractBtn.remove();
+    }
   };
 })();
