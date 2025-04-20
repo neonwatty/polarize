@@ -50,6 +50,23 @@ export function createOverlay() {
   dragHandle.textContent = 'Drag me! (double click to fix position)';
   overlay.appendChild(dragHandle);
 
+  // create extraction banner
+  const extractBanner = document.createElement('div');
+  extractBanner.style.position = 'absolute';
+  extractBanner.style.top = '0';
+  extractBanner.style.left = '0';
+  extractBanner.style.right = '0';
+  extractBanner.style.height = '30px';
+  extractBanner.style.cursor = 'pointer';
+  extractBanner.style.background = 'linear-gradient(to left, #ff6ec4, #7873f5, #1fd1f9)';
+  extractBanner.style.zIndex = '10002';
+  extractBanner.style.color = 'white';
+  extractBanner.style.fontSize = '20px';
+  extractBanner.style.fontWeight = 'bold';
+  extractBanner.style.textAlign = 'center';
+  extractBanner.textContent = 'Extracting code...';
+  overlay.appendChild(extractBanner);
+
 // create drag ability and visuals
 let isDragging = true;
 overlay.style.animation = 'borderPulseFlashy 1.5s infinite linear';
@@ -165,6 +182,13 @@ document.head.appendChild(style);
     });
 
   extractBtn.addEventListener('click', async () => {
+  // Play camera capture sound
+  const cameraSound = new Audio(chrome.runtime.getURL('camera-sound.mp3'));
+
+  cameraSound.play().catch((error) => {
+  console.error('INFO: Error playing sound:', error);
+  });
+
   // Temporarily hide the overlay and extract button
   overlay.style.display = 'none';
 
@@ -186,7 +210,12 @@ document.head.appendChild(style);
     // Convert the canvas to a Blob and upload it
     canvas.toBlob(async (blob) => {
       if (blob) {
-        await uploadSnapshot(blob);
+        // Add a border animation to the overlay
+        overlay.style.animation = 'borderPulseFlashy 1.5s infinite linear';
+        overlay._extractBtn.style.display = 'none';
+        overlay._extractBanner.style.display = 'block';
+
+        await uploadSnapshot(blob, overlay);
       } else {
         console.error('Failed to create Blob from canvas');
       }
@@ -194,8 +223,11 @@ document.head.appendChild(style);
   } catch (error) {
     console.error('Error capturing video player:', error);
   } finally {
-    // Restore the overlay visibility
+    // Remove the border animation and restore the overlay visibility
+    overlay.style.animation = ''; // Stop the animation
     overlay.style.display = 'block';
+    overlay._extractBtn.style.display = 'block';
+    overlay._extractBanner.style.display = 'none';
   }
 });
 
@@ -220,10 +252,10 @@ document.head.appendChild(style);
   overlay.appendChild(closeBtn);
 overlay.appendChild(extractBtn);
 overlay._extractBtn = extractBtn;
+overlay._extractBanner = extractBanner
+overlay._extractBanner.style.display = 'none';
 
   document.body.appendChild(overlay);
-
-
 
 }
 

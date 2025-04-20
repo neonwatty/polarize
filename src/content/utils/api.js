@@ -48,8 +48,9 @@ const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
 const ai = new GoogleGenAI({apiKey: GEMINI_API_KEY});
 
-export async function uploadSnapshot(blob) {
+export async function uploadSnapshot(blob, overlay) {
   try {
+    // package file for upload
     const uploaded = await ai.files.upload({
       file: blob,
       config: { mimeType: 'image/png' },
@@ -62,6 +63,11 @@ export async function uploadSnapshot(blob) {
         'Extract and return all source code shown in this image. Only output the code.',  //'Describe this image' 
       ]),
     });
+
+    overlay.style.animation = ''; // Stop the animation
+    overlay.style.display = 'block';
+    overlay._extractBtn.style.display = 'block';
+    overlay._extractBanner.style.display = 'none';
 
     console.log('Gemini response:', response.text);
     alert(response.text);
