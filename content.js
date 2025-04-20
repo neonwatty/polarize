@@ -115,6 +115,16 @@
   window.createOverlay = function () {
     if (document.getElementById('code-overlay')) return;
 
+    const videoPlayer = document.querySelector('.html5-video-player');
+    if (!videoPlayer) {
+      console.error('YouTube video player not found.');
+      return;
+    }
+
+    const videoRect = videoPlayer.getBoundingClientRect();
+
+    // Adjust the height to avoid overlapping YouTube controls
+    const controlsHeight = 70; // Approximate height of YouTube controls
     const overlay = document.createElement('div');
     overlay.id = 'code-overlay';
 
@@ -134,15 +144,11 @@
     dragHandle.textContent = 'Drag me!';
 
     overlay.appendChild(dragHandle);
-    overlay.style.position = 'fixed';
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
-    const overlayWidth = 1000;
-    const overlayHeight = 450;
-    overlay.style.left = `${(viewportWidth - overlayWidth) / 2}px`;
-    overlay.style.top = `${(viewportHeight - overlayHeight) / 2}px`;
-    overlay.style.width = '1000px';
-    overlay.style.height = '450px';
+    overlay.style.position = 'absolute';
+    overlay.style.left = `${videoRect.left}px`;
+    overlay.style.top = `${videoRect.top}px`;
+    overlay.style.width = `${videoRect.width}px`;
+    overlay.style.height = `${videoRect.height - controlsHeight}px`; // Subtract controls height
     overlay.style.background = 'rgba(255, 255, 255, 0)';
     overlay.style.backdropFilter = 'brightness(160%)';
     overlay.style.zIndex = 10000;
@@ -157,16 +163,17 @@
 
     overlay.addEventListener('dblclick', function () {
       isDragging = !isDragging;
-      
+
       if (isDragging) {
         overlay.style.animation = 'borderPulseFlashy 1.5s infinite linear';
         overlay._extractBtn.style.display = 'none';
+        console.log("INFO: showing dragHandle")
         dragHandle.classList.remove('hidden');
         dragHandle.style.cursor = 'move';
-
       } else {
         overlay.style.animation = 'none';
         overlay._extractBtn.style.display = 'block';
+        console.log("INFO: hiding dragHandle")
         dragHandle.classList.add('hidden');
       }
     });
@@ -223,7 +230,6 @@
     extractBtn.style.position = 'absolute';
     extractBtn.style.bottom = '4px';
     extractBtn.style.left = '50%';
-    extractBtn.style.transform = 'translateX(-50%)';
     extractBtn.style.padding = '5px 10px';
     extractBtn.style.fontSize = '14px';
     extractBtn.style.fontWeight = '600';
