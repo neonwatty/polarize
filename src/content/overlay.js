@@ -12,14 +12,17 @@ export function createOverlay() {
 
   const videoRect = videoPlayer.getBoundingClientRect();
   const controlsHeight = 70; // Approximate height of YouTube controls
+  const videoWidth = videoRect.width;
+  const videoWidthPad = 50
+  const videoHeight = videoRect.height - controlsHeight;
 
   // create overlay window
   const overlay = document.createElement('div');
   overlay.id = 'code-overlay';
   overlay.style.position = 'absolute';
-  overlay.style.left = `${videoRect.left}px`;
+  overlay.style.left = `${videoRect.left + videoWidthPad}px`;
   overlay.style.top = `${videoRect.top}px`;
-  overlay.style.width = `${videoRect.width}px`;
+  overlay.style.width = `${videoRect.width - 2*videoWidthPad}px`;
   overlay.style.height = `${videoRect.height - controlsHeight}px`;
   overlay.style.background = 'rgba(255, 255, 255, 0)';
   overlay.style.backdropFilter = 'brightness(160%)';
@@ -44,7 +47,7 @@ export function createOverlay() {
   dragHandle.style.fontSize = '20px';
   dragHandle.style.fontWeight = 'bold';
   dragHandle.style.textAlign = 'center';
-  dragHandle.textContent = 'Drag me!';
+  dragHandle.textContent = 'Drag me! (double click to fix position)';
   overlay.appendChild(dragHandle);
 
 // create drag ability and visuals
@@ -86,48 +89,60 @@ overlay.addEventListener('dblclick', function () {
 });
 
 dragHandle.addEventListener('mousedown', function (e) {
-    if (!isDragging) {return;}
-    const offsetX = e.clientX - overlay.getBoundingClientRect().left;
-    const offsetY = e.clientY - overlay.getBoundingClientRect().top;
+  if (!isDragging) return;
 
-    function onMouseMove(e) {
-    overlay.style.left = `${e.clientX - offsetX}px`;
-    overlay.style.top = `${e.clientY - offsetY}px`;
-    }
+  const videoRect = videoPlayer.getBoundingClientRect(); // Get the video player's bounds
+  const overlayRect = overlay.getBoundingClientRect();
+  const offsetX = e.clientX - overlayRect.left;
+  const offsetY = e.clientY - overlayRect.top;
 
-    function onMouseUp() {
+  function onMouseMove(e) {
+    // Calculate the new position
+    let newLeft = e.clientX - offsetX;
+    let newTop = e.clientY - offsetY;
+
+    // Constrain the overlay within the video player's bounds
+    newLeft = Math.max(videoRect.left, Math.min(newLeft, videoRect.right - overlayRect.width));
+    newTop = Math.max(videoRect.top, Math.min(newTop, videoRect.bottom - overlayRect.height));
+
+    // Apply the constrained position
+    overlay.style.left = `${newLeft}px`;
+    overlay.style.top = `${newTop}px`;
+  }
+
+  function onMouseUp() {
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
-    }
+  }
 
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
 });
 
 const style = document.createElement('style');
 style.innerHTML = `
     @keyframes borderPulseFlashy {
-    0% {
-        border-image-source: linear-gradient(45deg, #ff6ec4, #7873f5, #1fd1f9, #c3f584);
-        border-image-slice: 1;
-        transform: scale(1);
-    }
-    25% {
-        border-image-source: linear-gradient(90deg, #c3f584, #ff6ec4, #1fd1f9, #7873f5);
-        transform: scale(1.02);
-    }
-    50% {
-        border-image-source: linear-gradient(135deg, #7873f5, #1fd1f9, #c3f584, #ff6ec4);
-        transform: scale(1.04);
-    }
-    75% {
-        border-image-source: linear-gradient(180deg, #1fd1f9, #c3f584, #ff6ec4, #7873f5);
-        transform: scale(1.02);
-    }
-    100% {
-        border-image-source: linear-gradient(225deg, #ff6ec4, #7873f5, #1fd1f9, #c3f584);
-        transform: scale(1);
-    }
+        0% {
+            border-image-source: linear-gradient(45deg, #ff6ec4, #7873f5, #1fd1f9, #c3f584);
+            border-image-slice: 1;
+            border-width: 4px;
+        }
+        25% {
+            border-image-source: linear-gradient(90deg, #c3f584, #ff6ec4, #1fd1f9, #7873f5);
+            border-width: 6px;
+        }
+        50% {
+            border-image-source: linear-gradient(135deg, #7873f5, #1fd1f9, #c3f584, #ff6ec4);
+            border-width: 8px;
+        }
+        75% {
+            border-image-source: linear-gradient(180deg, #1fd1f9, #c3f584, #ff6ec4, #7873f5);
+            border-width: 6px;
+        }
+        100% {
+            border-image-source: linear-gradient(225deg, #ff6ec4, #7873f5, #1fd1f9, #c3f584);
+            border-width: 4px;
+        }
     }
 `;
 document.head.appendChild(style);
@@ -150,12 +165,47 @@ document.head.appendChild(style);
     });
 
   // add click event listener to export button - trigger api call
+  // extractBtn.addEventListener('click', async () => {
+  //   const canvas = await html2canvas(overlay);
+  //   canvas.toBlob(async (blob) => {
+  //     await uploadSnapshot(blob);
+  //   });
+  // });
+
   extractBtn.addEventListener('click', async () => {
-    const canvas = await html2canvas(overlay);
-    canvas.toBlob(async (blob) => {
-      await uploadSnapshot(blob);
+  // Temporarily hide the overlay and extract button
+  overlay.style.display = 'none';
+
+  try {
+    // Target the video player or its parent container
+    const videoPlayer = document.querySelector('.html5-video-player');
+    if (!videoPlayer) {
+      console.error('YouTube video player not found.');
+      overlay.style.display = 'block'; // Restore overlay visibility
+      return;
+    }
+
+    // Capture the video player area
+    const canvas = await html2canvas(videoPlayer, {
+      backgroundColor: null, // Ensure transparency for areas outside the video
+      useCORS: true, // Handle cross-origin issues if necessary
     });
-  });
+
+    // Convert the canvas to a Blob and upload it
+    canvas.toBlob(async (blob) => {
+      if (blob) {
+        await uploadSnapshot(blob);
+      } else {
+        console.error('Failed to create Blob from canvas');
+      }
+    });
+  } catch (error) {
+    console.error('Error capturing video player:', error);
+  } finally {
+    // Restore the overlay visibility
+    overlay.style.display = 'block';
+  }
+});
 
   overlay.appendChild(extractBtn);
 
