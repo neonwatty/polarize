@@ -11,7 +11,16 @@
 
   btn.addEventListener('click', (e) => {
     e.preventDefault();
-    window.createOverlay();
+    if (e.altKey) {
+      window.createOverlay();
+      return;
+    }
+    const existingOverlay = document.getElementById('code-overlay');
+    if (existingOverlay) {
+      window.removeOverlay();
+    } else {
+      window.createOverlay();
+    }
   });
 
   btn.addEventListener('contextmenu', (e) => {
@@ -96,14 +105,30 @@
       clearInterval(ytReady);
     }
   }, 500);
+
   window.createOverlay = function () {
     if (document.getElementById('code-overlay')) return;
 
     const overlay = document.createElement('div');
     overlay.id = 'code-overlay';
-    overlay.style.position = 'relative';
-    overlay.style.top = '50px';
-    overlay.style.left = '200px';
+
+    const dragHandle = document.createElement('div');
+    dragHandle.style.position = 'absolute';
+    dragHandle.style.top = '0';
+    dragHandle.style.left = '0';
+    dragHandle.style.right = '0';
+    dragHandle.style.height = '30px';
+    dragHandle.style.cursor = 'move';
+    dragHandle.style.background = 'linear-gradient(to right, #ff6ec4, #7873f5, #1fd1f9)';
+    dragHandle.style.zIndex = '10002';
+    overlay.appendChild(dragHandle);
+    overlay.style.position = 'fixed';
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    const overlayWidth = 1000;
+    const overlayHeight = 450;
+    overlay.style.left = `${(viewportWidth - overlayWidth) / 2}px`;
+    overlay.style.top = `${(viewportHeight - overlayHeight) / 2}px`;
     overlay.style.width = '1000px';
     overlay.style.height = '450px';
     overlay.style.background = 'rgba(255, 255, 255, 0.4)';
@@ -112,28 +137,29 @@
     overlay.style.resize = 'both';
     overlay.style.overflow = 'auto';
     overlay.style.border = '4px solid transparent';
-overlay.style.borderImage = 'linear-gradient(45deg, #ff6ec4, #7873f5, #1fd1f9, #c3f584) 1';
-// Animation will be toggled during drag mode
+    overlay.style.borderImage = 'linear-gradient(45deg, #ff6ec4, #7873f5, #1fd1f9, #c3f584) 1';
     overlay.style.cursor = 'default';
 
     let isDragging = true;
-  overlay.style.cursor = 'move';
-  overlay.style.animation = 'borderPulseFlashy 1.5s infinite linear';
+    overlay.style.animation = 'borderPulseFlashy 1.5s infinite linear';
 
     overlay.addEventListener('dblclick', function () {
-  isDragging = !isDragging;
-  overlay.style.cursor = isDragging ? 'move' : 'default';
+      isDragging = !isDragging;
+      overlay.style.cursor = isDragging ? 'move' : 'default';
+      
+      if (isDragging) {
+        overlay.style.animation = 'borderPulseFlashy 1.5s infinite linear';
+        overlay._extractBtn.style.display = 'none';
+        dragHandle.classList.remove('hidden');
 
-  if (isDragging) {
-    overlay.style.animation = 'borderPulseFlashy 1.5s infinite linear';
-    overlay._extractBtn.style.display = 'none';
-  } else {
-    overlay.style.animation = 'none';
-    overlay._extractBtn.style.display = 'block';
-  }
-});
+      } else {
+        overlay.style.animation = 'none';
+        overlay._extractBtn.style.display = 'block';
+        dragHandle.classList.add('hidden');
+      }
+    });
 
-    overlay.addEventListener('mousedown', function (e) {
+    dragHandle.addEventListener('mousedown', function (e) {
       if (!isDragging) return;
       const offsetX = e.clientX - overlay.getBoundingClientRect().left;
       const offsetY = e.clientY - overlay.getBoundingClientRect().top;
@@ -153,34 +179,33 @@ overlay.style.borderImage = 'linear-gradient(45deg, #ff6ec4, #7873f5, #1fd1f9, #
     });
 
     const style = document.createElement('style');
-style.innerHTML = `
-  @keyframes borderPulseFlashy {
-    0% {
-      border-image-source: linear-gradient(45deg, #ff6ec4, #7873f5, #1fd1f9, #c3f584);
-      border-image-slice: 1;
-      transform: scale(1);
-    }
-    25% {
-      border-image-source: linear-gradient(90deg, #c3f584, #ff6ec4, #1fd1f9, #7873f5);
-      transform: scale(1.02);
-    }
-    50% {
-      border-image-source: linear-gradient(135deg, #7873f5, #1fd1f9, #c3f584, #ff6ec4);
-      transform: scale(1.04);
-    }
-    75% {
-      border-image-source: linear-gradient(180deg, #1fd1f9, #c3f584, #ff6ec4, #7873f5);
-      transform: scale(1.02);
-    }
-    100% {
-      border-image-source: linear-gradient(225deg, #ff6ec4, #7873f5, #1fd1f9, #c3f584);
-      transform: scale(1);
-    }
-  }
-`;
-document.head.appendChild(style);
+    style.innerHTML = `
+      @keyframes borderPulseFlashy {
+        0% {
+          border-image-source: linear-gradient(45deg, #ff6ec4, #7873f5, #1fd1f9, #c3f584);
+          border-image-slice: 1;
+          transform: scale(1);
+        }
+        25% {
+          border-image-source: linear-gradient(90deg, #c3f584, #ff6ec4, #1fd1f9, #7873f5);
+          transform: scale(1.02);
+        }
+        50% {
+          border-image-source: linear-gradient(135deg, #7873f5, #1fd1f9, #c3f584, #ff6ec4);
+          transform: scale(1.04);
+        }
+        75% {
+          border-image-source: linear-gradient(180deg, #1fd1f9, #c3f584, #ff6ec4, #7873f5);
+          transform: scale(1.02);
+        }
+        100% {
+          border-image-source: linear-gradient(225deg, #ff6ec4, #7873f5, #1fd1f9, #c3f584);
+          transform: scale(1);
+        }
+      }
+    `;
+    document.head.appendChild(style);
 
-    // Create extract button
     const extractBtn = document.createElement('button');
     extractBtn.textContent = 'Extract Code';
     extractBtn.style.position = 'absolute';
@@ -198,28 +223,21 @@ document.head.appendChild(style);
     extractBtn.style.display = isDragging ? 'none' : 'block';
     extractBtn.style.zIndex = '10001';
 
-    // Defer button positioning until overlay is rendered
-    
-
     extractBtn.addEventListener('mouseenter', () => {
       extractBtn.style.backgroundImage = 'linear-gradient(135deg, #c3f584, #1fd1f9)';
       extractBtn.style.transform = 'scale(1.1)';
     });
-
     extractBtn.addEventListener('mouseleave', () => {
       extractBtn.style.backgroundImage = 'linear-gradient(135deg, #ff6ec4, #7873f5)';
       extractBtn.style.transform = 'scale(1)';
     });
-
     extractBtn.addEventListener('mousedown', () => {
       extractBtn.style.transform = 'scale(0.95)';
     });
-
     extractBtn.addEventListener('mouseup', () => {
       extractBtn.style.transform = 'scale(1.05)';
     });
 
-    // Create close button
     const closeBtn = document.createElement('button');
     closeBtn.textContent = '×';
     closeBtn.style.position = 'absolute';
@@ -238,7 +256,6 @@ document.head.appendChild(style);
 
     overlay.appendChild(closeBtn);
     overlay.appendChild(extractBtn);
-
     overlay._extractBtn = extractBtn;
 
     document.body.appendChild(overlay);
