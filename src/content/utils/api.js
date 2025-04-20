@@ -1,3 +1,8 @@
+
+
+
+
+
 export async function uploadSnapshot(blob) {
   const formData = new FormData();
   formData.append('file', blob, 'overlay.png');

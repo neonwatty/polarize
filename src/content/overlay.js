@@ -164,14 +164,6 @@ document.head.appendChild(style);
       extractBtn.style.transform = 'scale(1.05)';
     });
 
-  // add click event listener to export button - trigger api call
-  // extractBtn.addEventListener('click', async () => {
-  //   const canvas = await html2canvas(overlay);
-  //   canvas.toBlob(async (blob) => {
-  //     await uploadSnapshot(blob);
-  //   });
-  // });
-
   extractBtn.addEventListener('click', async () => {
   // Temporarily hide the overlay and extract button
   overlay.style.display = 'none';
