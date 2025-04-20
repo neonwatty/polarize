@@ -10,13 +10,10 @@
       "16": "icon.png"
     }
   },
-  "background": {
-    "service_worker": "background.js"
-  },
   "content_scripts": [
     {
       "matches": ["*://*.youtube.com/*"],
-      "js": ["content.js"]
+      "js": ["assets/content.js"]
     }
   ]
 }
