@@ -1,19 +1,6 @@
+import html2canvas from 'html2canvas';
+
 (() => {
-  // Load html2canvas
-  const html2canvasScript = document.createElement('script');
-  html2canvasScript.src = "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";
-
-  // Wait for the script to load before using html2canvas
-  html2canvasScript.onload = () => {
-    // Now it's safe to use html2canvas
-    html2canvas(document.querySelector("#capture")).then(canvas => {
-      document.body.appendChild(canvas);
-    });
-  };
-
-  document.head.appendChild(html2canvasScript);
-
-
   function injectPolarizeButton() {
   const container = document.querySelector('.ytp-left-controls');
   if (!container || document.getElementById('polarize-toggle')) return;
@@ -272,8 +259,8 @@
 
     extractBtn.addEventListener('click', async () => {
       const overlay = document.getElementById('code-overlay');
-      if (!window.html2canvas || !overlay) {
-        alert("html2canvas not loaded or overlay not found");
+      if (!overlay) {
+        alert("overlay not found");
         return;
       }
 
