@@ -1,4 +1,19 @@
 (() => {
+  // Load html2canvas
+  const html2canvasScript = document.createElement('script');
+  html2canvasScript.src = "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";
+
+  // Wait for the script to load before using html2canvas
+  html2canvasScript.onload = () => {
+    // Now it's safe to use html2canvas
+    html2canvas(document.querySelector("#capture")).then(canvas => {
+      document.body.appendChild(canvas);
+    });
+  };
+
+  document.head.appendChild(html2canvasScript);
+
+
   function injectPolarizeButton() {
   const container = document.querySelector('.ytp-left-controls');
   if (!container || document.getElementById('polarize-toggle')) return;
@@ -167,13 +182,11 @@
       if (isDragging) {
         overlay.style.animation = 'borderPulseFlashy 1.5s infinite linear';
         overlay._extractBtn.style.display = 'none';
-        console.log("INFO: showing dragHandle")
         dragHandle.classList.remove('hidden');
         dragHandle.style.cursor = 'move';
       } else {
         overlay.style.animation = 'none';
         overlay._extractBtn.style.display = 'block';
-        console.log("INFO: hiding dragHandle")
         dragHandle.classList.add('hidden');
       }
     });
@@ -240,6 +253,7 @@
     extractBtn.style.borderRadius = '4px';
     extractBtn.style.display = isDragging ? 'none' : 'block';
     extractBtn.style.zIndex = '10001';
+    extractBtn.style.cursor = "pointer";
 
     extractBtn.addEventListener('mouseenter', () => {
       extractBtn.style.backgroundImage = 'linear-gradient(135deg, #c3f584, #1fd1f9)';
@@ -255,6 +269,32 @@
     extractBtn.addEventListener('mouseup', () => {
       extractBtn.style.transform = 'scale(1.05)';
     });
+
+    extractBtn.addEventListener('click', async () => {
+      const overlay = document.getElementById('code-overlay');
+      if (!window.html2canvas || !overlay) {
+        alert("html2canvas not loaded or overlay not found");
+        return;
+      }
+
+      const canvas = await html2canvas(overlay);
+      canvas.toBlob(async (blob) => {
+        const formData = new FormData();
+        formData.append('file', blob, 'overlay.png');
+
+        // Example test endpoint (mockbin for demo)
+        const response = await fetch('https://httpbin.org/post', {
+          method: 'POST',
+          body: formData,
+        });
+
+        const result = await response.json();
+        console.log(result);
+        alert("Upload complete! Check console for response.");
+      });
+    });
+
+
 
     const closeBtn = document.createElement('button');
     closeBtn.textContent = '×';
