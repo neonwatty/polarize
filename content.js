@@ -27,7 +27,7 @@
     panel.id = 'polarize-panel';
     const iconRect = btn.getBoundingClientRect();
     panel.style.position = 'absolute';
-    panel.style.top = `${iconRect.bottom + 8}px`;
+    panel.style.top = `${iconRect.bottom - 18}px`;
     panel.style.left = `${iconRect.left}px`;
     panel.style.background = 'rgba(30, 30, 30, 0.95)';
     panel.style.padding = '12px 16px';
@@ -101,11 +101,11 @@
 
     const overlay = document.createElement('div');
     overlay.id = 'code-overlay';
-    overlay.style.position = 'sticky';
-    overlay.style.top = '100px';
-    overlay.style.left = '100px';
-    overlay.style.width = '600px';
-    overlay.style.height = '400px';
+    overlay.style.position = 'relative';
+    overlay.style.top = '50px';
+    overlay.style.left = '200px';
+    overlay.style.width = '1000px';
+    overlay.style.height = '450px';
     overlay.style.background = 'rgba(255, 255, 255, 0.4)';
     overlay.style.backdropFilter = 'brightness(160%)';
     overlay.style.zIndex = 10000;
