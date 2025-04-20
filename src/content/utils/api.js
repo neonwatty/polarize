@@ -59,7 +59,7 @@ export async function uploadSnapshot(blob) {
       model: 'gemini-2.0-flash',
       contents: createUserContent([
         createPartFromUri(uploaded.uri, uploaded.mimeType),
-        'Describe this image' //'Extract and return all source code shown in this image. Only output the code.',
+        'Extract and return all source code shown in this image. Only output the code.',  //'Describe this image' 
       ]),
     });
 
