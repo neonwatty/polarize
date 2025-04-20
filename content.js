@@ -121,6 +121,12 @@
     dragHandle.style.cursor = 'move';
     dragHandle.style.background = 'linear-gradient(to right, #ff6ec4, #7873f5, #1fd1f9)';
     dragHandle.style.zIndex = '10002';
+    dragHandle.style.color = 'white';
+    dragHandle.style.fontSize = '20px';
+    dragHandle.style.fontWeight = 'bold';
+    dragHandle.style.textAlign = 'center';
+    dragHandle.textContent = 'Drag me!';
+
     overlay.appendChild(dragHandle);
     overlay.style.position = 'fixed';
     const viewportWidth = window.innerWidth;
@@ -131,7 +137,7 @@
     overlay.style.top = `${(viewportHeight - overlayHeight) / 2}px`;
     overlay.style.width = '1000px';
     overlay.style.height = '450px';
-    overlay.style.background = 'rgba(255, 255, 255, 0.4)';
+    overlay.style.background = 'rgba(255, 255, 255, 0)';
     overlay.style.backdropFilter = 'brightness(160%)';
     overlay.style.zIndex = 10000;
     overlay.style.resize = 'both';
