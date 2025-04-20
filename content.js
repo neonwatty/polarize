@@ -50,9 +50,15 @@
         <button id="polarize-remove">Remove Overlay</button>
         <label>Theme:
           <select id="polarize-theme">
-            <option value=\"none\">Normal</option>
-            <option value=\"brightness(160%)\">Bright</option>
-            <option value=\"contrast(200%)\">High Contrast</option>
+            <option value="brightness(100%)">Normal</option>
+            <option value="brightness(160%)">Bright</option>
+            <option value="contrast(200%)">High Contrast</option>
+            <option value="grayscale(100%)">Monokai Style</option>
+            <option value="saturate(200%) hue-rotate(300deg)">Solarized Dark</option>
+            <option value="hue-rotate(180deg) contrast(150%)">Dracula Style</option>
+            <option value="brightness(110%) contrast(120%) saturate(120%)">Solarized Light</option>
+            <option value="sepia(10%) brightness(115%) contrast(105%)">GitHub Light</option>
+            <option value="brightness(130%) hue-rotate(20deg) saturate(110%)">VS Code Light</option>
           </select>
         </label>
         <label>Invert:
@@ -151,12 +157,12 @@
 
     overlay.addEventListener('dblclick', function () {
       isDragging = !isDragging;
-      overlay.style.cursor = isDragging ? 'move' : 'default';
       
       if (isDragging) {
         overlay.style.animation = 'borderPulseFlashy 1.5s infinite linear';
         overlay._extractBtn.style.display = 'none';
         dragHandle.classList.remove('hidden');
+        dragHandle.style.cursor = 'move';
 
       } else {
         overlay.style.animation = 'none';
