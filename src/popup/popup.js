@@ -25,7 +25,7 @@ function updateOverlayFilter() {
       args: [filter],
       func: (filter) => {
         const overlay = document.getElementById('code-overlay');
-        if (overlay) overlay.style.backdropFilter = filter;
+        if (overlay) {overlay.style.backdropFilter = filter;}
       }
     });
   });
@@ -37,7 +37,7 @@ function updateOverlayFilter() {
       args: [filter],
       func: (filter) => {
         const overlay = document.getElementById('code-overlay');
-        if (overlay) overlay.style.backdropFilter = filter;
+        if (overlay) {overlay.style.backdropFilter = filter;}
       }
     });
   });

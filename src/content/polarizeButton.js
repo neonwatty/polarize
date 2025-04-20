@@ -1,6 +1,6 @@
 export function injectPolarizeButton() {
   const container = document.querySelector('.ytp-left-controls');
-  if (!container || document.getElementById('polarize-toggle')) return;
+  if (!container || document.getElementById('polarize-toggle')) {return;}
 
   const btn = document.createElement('button');
   btn.id = 'polarize-toggle';

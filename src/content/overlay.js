@@ -2,7 +2,7 @@ import html2canvas from 'html2canvas';
 import { uploadSnapshot } from './utils/api.js';
 
 export function createOverlay() {
-  if (document.getElementById('code-overlay')) return;
+  if (document.getElementById('code-overlay')) {return;}
 
   const videoPlayer = document.querySelector('.html5-video-player');
   if (!videoPlayer) {
@@ -65,9 +65,9 @@ overlay.style.animation = 'borderPulseFlashy 1.5s infinite linear';
   extractBtn.style.color = '#fff';
   extractBtn.style.border = '1px solid #888';
   extractBtn.style.borderRadius = '4px';
-  extractBtn.style.display = "none"
+  extractBtn.style.display = 'none';
   extractBtn.style.zIndex = '10001';
-  extractBtn.style.cursor = "pointer";
+  extractBtn.style.cursor = 'pointer';
 
 // add "move mode"
 overlay.addEventListener('dblclick', function () {
@@ -86,7 +86,7 @@ overlay.addEventListener('dblclick', function () {
 });
 
 dragHandle.addEventListener('mousedown', function (e) {
-    if (!isDragging) return;
+    if (!isDragging) {return;}
     const offsetX = e.clientX - overlay.getBoundingClientRect().left;
     const offsetY = e.clientY - overlay.getBoundingClientRect().top;
 
@@ -187,5 +187,5 @@ overlay._extractBtn = extractBtn;
 
 export function removeOverlay() {
   const overlay = document.getElementById('code-overlay');
-  if (overlay) overlay.remove();
+  if (overlay) {overlay.remove();}
 }
