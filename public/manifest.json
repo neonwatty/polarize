@@ -7,7 +7,7 @@
   "action": {
     "default_popup": "src/popup/popup.html",
     "default_icon": {
-      "16": "icon.png"
+      "16": "polarize.png"
     }
   },
   "content_scripts": [

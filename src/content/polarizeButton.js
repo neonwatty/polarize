@@ -6,7 +6,24 @@ export function injectPolarizeButton() {
   btn.id = 'polarize-toggle';
   btn.className = 'ytp-button';
   btn.title = 'Toggle Polarize Controls';
-  btn.innerHTML = '<span style="font-weight: bold; font-size: 16px; color: white;">&lt;/&gt;</span>';
+  btn.innerHTML = `
+    <span style="display: inline-flex; align-items: center; justify-content: center; gap: 4px; font-weight: bold; font-size: 16px; color: white; margin-top: 12px; margin-right: 9px">
+      <svg width="24" height="24" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="border-radius: 50%; flex-shrink: 0;">
+        <defs>
+          <linearGradient id="lensGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#00BFFF"/>
+            <stop offset="25%" stop-color="#8A2BE2"/>
+            <stop offset="50%" stop-color="#FF1493"/>
+            <stop offset="75%" stop-color="#FFA500"/>
+            <stop offset="100%" stop-color="#FFFF00"/>
+          </linearGradient>
+        </defs>
+        <circle cx="50" cy="50" r="45" fill="url(#lensGradient)" stroke="black" stroke-width="10"/>
+      </svg>
+    </span>
+  `;
+
+
 
   btn.addEventListener('click', (e) => {
     e.preventDefault();
