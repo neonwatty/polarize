@@ -1,9 +1,10 @@
 import { CodeJar } from 'codejar';
-import Prism from 'prismjs';
-import 'prismjs/themes/prism.css'; // Ensure the Prism CSS is imported
-// Import additional Prism languages as needed
-import 'prismjs/components/prism-python'
-import 'prismjs/components/prism-javascript';
+import hljs from 'highlight.js/lib/core';
+import python from 'highlight.js/lib/languages/python';
+// import 'highlight.js/styles/default.css';
+import 'highlight.js/styles/atom-one-dark.css';
+
+hljs.registerLanguage('python', python);
 
 function showCodeEditorModal(overlay, language, code) {
   // Create the modal container
@@ -39,7 +40,6 @@ function showCodeEditorModal(overlay, language, code) {
   // Create the editor container
   const editor = document.createElement('div');
   editor.contentEditable = 'true';
-  editor.classList.add(`language-${language}`);
   Object.assign(editor.style, {
     flex: '1',
     overflow: 'auto',
@@ -50,6 +50,7 @@ function showCodeEditorModal(overlay, language, code) {
     padding: '8px',
     backgroundColor: '#f5f5f5',
   });
+
 
   // Create the "Copy to Clipboard" button
   const copyButton = document.createElement('button');
@@ -76,13 +77,15 @@ function showCodeEditorModal(overlay, language, code) {
   // Define the highlight function
   const highlight = (editorElement) => {
     const codeContent = editorElement.textContent;
-    const grammar = Prism.languages[language] || Prism.languages.javascript;
-    editorElement.innerHTML = Prism.highlight(codeContent, grammar, language);
-  };
+    const result = hljs.highlight(codeContent, { language }).value;
+    editorElement.innerHTML = result;
+    };
 
   // Initialize CodeJar
   const jar = CodeJar(editor, highlight);
+  
   jar.updateCode(code);
+  console.log("code", code)
 
   // Copy to clipboard functionality
   copyButton.addEventListener('click', () => {
