@@ -5,7 +5,7 @@
   "description": "Adds a resizable transparent overlay to help brighten code blocks in YouTube tutorials.",
   "permissions": ["activeTab", "scripting"],
   "action": {
-    "default_popup": "popup.html",
+    "default_popup": "src/popup/popup.html",
     "default_icon": {
       "16": "icon.png"
     }

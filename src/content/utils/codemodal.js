@@ -1,3 +1,10 @@
+import { CodeJar } from 'codejar';
+import Prism from 'prismjs';
+import 'prismjs/themes/prism.css'; // Ensure the Prism CSS is imported
+// Import additional Prism languages as needed
+import 'prismjs/components/prism-python'
+import 'prismjs/components/prism-javascript';
+
 function showCodeEditorModal(overlay, language, code) {
   // Create the modal container
   const modal = document.createElement('div');
@@ -15,26 +22,33 @@ function showCodeEditorModal(overlay, language, code) {
     zIndex: '10000',
     padding: '16px',
     overflow: 'hidden',
+    display: 'flex',
+    flexDirection: 'column',
   });
 
   // Create a close button
   const closeButton = document.createElement('button');
   closeButton.textContent = 'Close';
   Object.assign(closeButton.style, {
-    position: 'absolute',
-    top: '8px',
-    right: '8px',
+    alignSelf: 'flex-end',
     cursor: 'pointer',
+    marginBottom: '8px',
   });
   closeButton.addEventListener('click', () => modal.remove());
 
-  // Create a textarea for CodeMirror
-  const textarea = document.createElement('textarea');
-  textarea.value = code;
-  Object.assign(textarea.style, {
-    width: '100%',
-    height: '80%',
-    marginBottom: '16px',
+  // Create the editor container
+  const editor = document.createElement('div');
+  editor.contentEditable = 'true';
+  editor.classList.add(`language-${language}`);
+  Object.assign(editor.style, {
+    flex: '1',
+    overflow: 'auto',
+    fontFamily: 'monospace',
+    fontSize: '14px',
+    border: '1px solid #ccc',
+    borderRadius: '4px',
+    padding: '8px',
+    backgroundColor: '#f5f5f5',
   });
 
   // Create the "Copy to Clipboard" button
@@ -50,43 +64,34 @@ function showCodeEditorModal(overlay, language, code) {
     borderRadius: '4px',
     fontSize: '14px',
     fontWeight: 'bold',
+    alignSelf: 'flex-start',
   });
+
+  // Append elements to the modal
+  modal.appendChild(closeButton);
+  modal.appendChild(editor);
+  modal.appendChild(copyButton);
+  overlay.appendChild(modal);
+
+  // Define the highlight function
+  const highlight = (editorElement) => {
+    const codeContent = editorElement.textContent;
+    const grammar = Prism.languages[language] || Prism.languages.javascript;
+    editorElement.innerHTML = Prism.highlight(codeContent, grammar, language);
+  };
+
+  // Initialize CodeJar
+  const jar = CodeJar(editor, highlight);
+  jar.updateCode(code);
+
+  // Copy to clipboard functionality
   copyButton.addEventListener('click', () => {
-    navigator.clipboard.writeText(editor.getValue()).then(() => {
+    navigator.clipboard.writeText(jar.toString()).then(() => {
       alert('Code copied to clipboard!');
     }).catch((err) => {
       console.error('Failed to copy code:', err);
     });
   });
-
-  // Append elements to the modal
-  modal.appendChild(closeButton);
-  modal.appendChild(textarea);
-  modal.appendChild(copyButton);
-  overlay.appendChild(modal);
-
-  // Determine the language mode
-  console.log("INFO: A")
-  let mode;
-  switch (language.toLowerCase()) {
-    case 'python':
-      mode = 'python';
-      break;
-    case 'javascript':
-    default:
-      mode = 'javascript';
-      break;
-  }
-  console.log("INFO: B")
-  console.log("mode", mode)
-
-  // Initialize CodeMirror
-  const editor = CodeMirror.fromTextArea(textarea, {
-    lineNumbers: false,
-    mode: mode,
-    theme: 'default',
-  });
 }
-
 
 export { showCodeEditorModal };

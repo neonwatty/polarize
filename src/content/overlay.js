@@ -2,6 +2,7 @@ import html2canvas from 'html2canvas';
 import { uploadSnapshot } from './utils/api.js';
 
 export function createOverlay() {
+  
   if (document.getElementById('code-overlay')) {return;}
 
   const videoPlayer = document.querySelector('.html5-video-player');

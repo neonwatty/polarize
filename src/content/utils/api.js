@@ -106,7 +106,7 @@ export async function uploadSnapshot(blob, overlay) {
 
     if (parsed && parsed.language && typeof parsed.code === 'string') {
       console.log('✅ Parsed VLM result:', parsed);
-      showCodeEditorModal(overlay, parsed.language, parsed.code);
+      showCodeEditorModal(overlay, parsed.language.toLowerCase(), parsed.code);
     } else {
       console.warn('⚠️ Invalid or incomplete result:', raw);
       alert('⚠️ Invalid or incomplete result:', raw);
