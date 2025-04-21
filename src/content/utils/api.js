@@ -37,7 +37,7 @@
 //   }
 // }
 
-
+import { showCodeEditorModal } from './codemodal.js';
 import {
   GoogleGenAI,
   createUserContent,
@@ -47,6 +47,21 @@ import {
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
 const ai = new GoogleGenAI({apiKey: GEMINI_API_KEY});
+
+function extractJsonFromPossibleMarkdown(raw) {
+  const trimmed = raw.trim();
+
+  // Check if it's wrapped in a Markdown code block
+  const match = trimmed.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/);
+  const jsonStr = match ? match[1] : trimmed;
+
+  try {
+    return JSON.parse(jsonStr);
+  } catch (e) {
+    console.error('❌ Failed to parse JSON:', e);
+    return null;
+  }
+}
 
 export async function uploadSnapshot(blob, overlay) {
   try {
@@ -60,7 +75,24 @@ export async function uploadSnapshot(blob, overlay) {
       model: 'gemini-2.0-flash',
       contents: createUserContent([
         createPartFromUri(uploaded.uri, uploaded.mimeType),
-        'Extract and return all source code shown in this image. Only output the code.',  //'Describe this image' 
+        `
+        Extract all source code visible in this image. The image may contain multiple code blocks, multiline snippets, or non-code text — ignore everything except the raw source code.  Do not return line numbers.
+        Identify the programming language, and return the result in the following JSON format:
+
+        {
+          "language": "<coding language>",
+          "code": "<detected code>"
+        }
+
+        If no source code is found, return:
+
+        {
+          "language": null,
+          "code": ""
+        }
+
+        Do not include explanations, markdown formatting, or additional text.  Return only the raw JSON — do not wrap it in a code block or use markdown formatting.
+        `
       ]),
     });
 
@@ -69,8 +101,18 @@ export async function uploadSnapshot(blob, overlay) {
     overlay._extractBtn.style.display = 'block';
     overlay._extractBanner.style.display = 'none';
 
-    console.log('Gemini response:', response.text);
-    alert(response.text);
+    const raw = response.text;
+    const parsed = extractJsonFromPossibleMarkdown(raw);
+
+    if (parsed && parsed.language && typeof parsed.code === 'string') {
+      console.log('✅ Parsed VLM result:', parsed);
+      showCodeEditorModal(overlay, parsed.language, parsed.code);
+    } else {
+      console.warn('⚠️ Invalid or incomplete result:', raw);
+      alert('⚠️ Invalid or incomplete result:', raw);
+    }
+    
+
   } catch (err) {
     console.error('Gemini OCR error:', err);
     alert('Failed to extract code. See console for details.');

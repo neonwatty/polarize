@@ -6,6 +6,11 @@
     button { margin-top: 5px; display: block; }
     label { display: block; margin-top: 10px; }
   </style>
+
+
+  <!-- CodeMirror CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/codemirror.min.css">
+
 </head>
 <body>
   <h4>Overlay Controls</h4>
@@ -29,6 +34,15 @@
     Invert Amount:
     <input type="range" id="invertSlider" min="0" max="100" value="0">
   </label>
-  <script src="popup.js"></script>
+
+  <script src="popup.js" type="module"></script>
+
+  <!-- CodeMirror Core JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/codemirror.min.js"></script>
+
+  <!-- Language Modes -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/mode/javascript/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/mode/python/python.min.js"></script>
+
 </body>
 </html>
