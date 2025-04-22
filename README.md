@@ -5,8 +5,7 @@
 With a single-click, theme-adjustable overlay, Polarize brightens dark IDEs in videos, reduces glare, and uses AI to let you copy code straight from the screen.
 
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/j1TMdbrnl_A" frameborder="0" allowfullscreen></iframe>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/j1TMdbrnl_A?modestbranding=1" frameborder="0" allowfullscreen></iframe>
+[![Polarize demo](https://img.youtube.com/vi/j1TMdbrnl_A/0.jpg)](https://www.youtube.com/watch?v=j1TMdbrnl_A)
 
 
 Quick links:
