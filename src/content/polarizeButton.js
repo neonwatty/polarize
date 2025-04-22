@@ -48,40 +48,80 @@ export function injectPolarizeButton() {
       return;
     }
 
-    const panel = document.createElement('div');
-    panel.id = 'polarize-panel';
-    const iconRect = btn.getBoundingClientRect();
-    panel.style.position = 'absolute';
-    panel.style.top = `${iconRect.bottom - 18}px`;
-    panel.style.left = `${iconRect.left}px`;
-    panel.style.background = 'rgba(30, 30, 30, 0.95)';
-    panel.style.padding = '12px 16px';
-    panel.style.borderRadius = '12px';
-    panel.style.border = '1px solid #555';
-    panel.style.color = 'white';
-    panel.style.zIndex = '10001';
-    panel.innerHTML = `
-      <div style="display: flex; flex-direction: column; gap: 8px;">
-        <button id="polarize-add">Add Overlay</button>
-        <button id="polarize-remove">Remove Overlay</button>
-        <label>Theme:
-          <select id="polarize-theme">
-            <option value="brightness(100%)">Normal</option>
-            <option value="brightness(160%)">Bright</option>
-            <option value="contrast(200%)">High Contrast</option>
-            <option value="grayscale(100%)">Monokai Style</option>
-            <option value="saturate(200%) hue-rotate(300deg)">Solarized Dark</option>
-            <option value="hue-rotate(180deg) contrast(150%)">Dracula Style</option>
-            <option value="brightness(110%) contrast(120%) saturate(120%)">Solarized Light</option>
-            <option value="sepia(10%) brightness(115%) contrast(105%)">GitHub Light</option>
-            <option value="brightness(130%) hue-rotate(20deg) saturate(110%)">VS Code Light</option>
-          </select>
-        </label>
-        <label>Invert:
-          <input type="range" id="polarize-invert" min="0" max="100" value="0" />
-        </label>
-      </div>
-    `;
+  const panel = document.createElement('div');
+  panel.id = 'polarize-panel';
+
+  const iconRect = btn.getBoundingClientRect();
+  panel.style.position = 'absolute';
+  panel.style.top = `${iconRect.bottom - 18}px`;
+  panel.style.left = `${iconRect.left}px`;
+  panel.style.background = 'rgba(31, 41, 55, 0.95)'; // Slightly warmer dark tone
+  panel.style.padding = '16px';
+  panel.style.borderRadius = '10px';
+  panel.style.border = '1px solid #4b5563';
+  panel.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.3)';
+  panel.style.color = 'white';
+  panel.style.fontFamily = 'Segoe UI, Tahoma, sans-serif';
+  panel.style.fontSize = '14px';
+  panel.style.zIndex = '10001';
+
+  panel.innerHTML = `
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <button id="polarize-add" style="
+        background-color: #3b82f6;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.2s;
+      ">Add Overlay</button>
+
+      <button id="polarize-remove" style="
+        background-color: #ef4444;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.2s;
+      ">Remove Overlay</button>
+
+      <label style="display: flex; flex-direction: column; font-weight: 500;">
+        Theme:
+        <select id="polarize-theme" style="
+          margin-top: 4px;
+          padding: 6px;
+          border-radius: 4px;
+          border: 1px solid #6b7280;
+          background-color: #1f2937;
+          color: white;
+          font-size: 14px;
+        ">
+          <option value="brightness(100%)">Normal</option>
+          <option value="brightness(160%)">Bright</option>
+          <option value="contrast(200%)">High Contrast</option>
+          <option value="grayscale(100%)">Monokai Style</option>
+          <option value="saturate(200%) hue-rotate(300deg)">Solarized Dark</option>
+          <option value="hue-rotate(180deg) contrast(150%)">Dracula Style</option>
+          <option value="brightness(110%) contrast(120%) saturate(120%)">Solarized Light</option>
+          <option value="sepia(10%) brightness(115%) contrast(105%)">GitHub Light</option>
+          <option value="brightness(130%) hue-rotate(20deg) saturate(110%)">VS Code Light</option>
+        </select>
+      </label>
+
+      <label style="display: flex; flex-direction: column; font-weight: 500;">
+        Invert:
+        <input type="range" id="polarize-invert" min="0" max="100" value="0" style="
+          margin-top: 4px;
+          accent-color: #3b82f6;
+        " />
+      </label>
+    </div>
+  `;
+
 
     setTimeout(() => {
       document.getElementById('polarize-add')?.addEventListener('click', window.createOverlay);

@@ -2,18 +2,88 @@
 <html>
 <head>
   <style>
-    body { font-family: sans-serif; padding: 10px; }
-    button { margin-top: 5px; display: block; }
-    label { display: block; margin-top: 10px; }
-    .input-container { display: flex; align-items: center; gap: 5px; }
-    #toggleVisibility { cursor: pointer; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9fafb;
+      padding: 16px;
+      margin: 0;
+      width: 300px;
+      color: #111827;
+    }
+
+    h4 {
+      margin-bottom: 10px;
+      color: #1f2937;
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 4px;
+    }
+
+    button {
+      background-color: #3b82f6;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      margin-top: 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.2s;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #2563eb;
+    }
+
+    label {
+      display: block;
+      margin-top: 14px;
+      font-weight: 500;
+      color: #374151;
+    }
+
+    select, input[type="password"], input[type="range"] {
+      margin-top: 6px;
+      padding: 6px;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      width: 100%;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+
+    .input-container {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    #toggleVisibility {
+      background: #e5e7eb;
+      border: none;
+      border-radius: 4px;
+      padding: 6px 10px;
+      font-size: 16px;
+      transition: background 0.2s;
+    }
+
+    #toggleVisibility:hover {
+      background: #d1d5db;
+    }
+
+    #status {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #10b981;
+    }
   </style>
-  
 </head>
 <body>
   <h4>Overlay Controls</h4>
   <button id="addOverlay">Add Overlay</button>
   <button id="removeOverlay">Remove Overlay</button>
+
   <label>
     Theme:
     <select id="contrastLevel">
@@ -28,24 +98,23 @@
       <option value="brightness(130%) hue-rotate(20deg) saturate(110%)">VS Code Light</option>
     </select>
   </label>
+
   <label>
     Invert Amount:
     <input type="range" id="invertSlider" min="0" max="100" value="0">
   </label>
 
-<h4>API Key Settings</h4>
-<label for="apiKey">Enter your Gemini API Key:</label>
-<div class="input-container">
-  <input type="password" id="apiKey" placeholder="Enter API Key" />
-  <button id="toggleVisibility" type="button">👁️</button>
+  <h4>API Key Settings</h4>
+  <label for="apiKey">Enter your Gemini API Key:</label>
+  <div class="input-container">
+    <input type="password" id="apiKey" placeholder="Enter API Key" />
+    <button id="toggleVisibility" type="button">👁️</button>
+  </div>
+  <button id="saveApiKey">Save API Key</button>
+  <button id="deleteApiKey">Delete API Key</button>
 
-</div>
-<button id="saveApiKey">Save API Key</button>
-<button id="deleteApiKey">Delete API Key</button>
-
-<p id="status"></p>
+  <p id="status"></p>
 
   <script src="popup.js" type="module"></script>
-
 </body>
 </html>
