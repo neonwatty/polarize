@@ -1,4 +1,5 @@
 # Logs
+test-results/
 *.env
 **.DS_Store
 logs
