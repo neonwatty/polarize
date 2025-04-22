@@ -7,7 +7,7 @@ With a single-click, theme-adjustable overlay, Polarize brightens dark IDEs in v
 
 
 <p align="center">
-  <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+  <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
     <figure>
         <img align="center" src="https://github.com/neonwatty/readme_gifs/blob/main/polarize-code-copy-demo.gif" height="325">
       <figcaption>code copy</figcaption>
