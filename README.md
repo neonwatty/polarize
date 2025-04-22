@@ -18,6 +18,7 @@ With a single-click, theme-adjustable overlay, Polarize brightens dark IDEs in v
     </figure>
   </div>
 
+Quick links:
 
 - [Features](#-features) 
 - [Getting Started (Local Development)](#-getting-started-local-development)
