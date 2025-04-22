@@ -5,6 +5,20 @@
 With a single-click, theme-adjustable overlay, Polarize brightens dark IDEs in videos, reduces glare, and uses AI to let you copy code straight from the screen.
 
 
+
+<p align="center">
+  <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+    <figure>
+        <img align="center" src="https://github.com/neonwatty/readme_gifs/blob/main/polarize-code-copy-demo.gif" height="325">
+      <figcaption>code copy</figcaption>
+    </figure>
+    <figure>
+        <img align="center" src="https://github.com/neonwatty/readme_gifs/blob/main/polarize-theme-demo.gif" height="325">
+      <figcaption>Theme and glare reduction</figcaption>
+    </figure>
+  </div>
+
+
 - [Features](#-features) 
 - [Getting Started (Local Development)](#-getting-started-local-development)
 - [Local Testing](#-local-testing)
