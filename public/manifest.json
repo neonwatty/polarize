@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Polarize",
   "version": "0.1",
-  "description": "Polarize helps developers learn faster from YouTube tutorials — with AI-powered code copying, glare reduction, and a single-click, multi-theme overlay that brightens dark in-video IDEs.",
+  "description": "Accelerate how you learn to code on YouTube with Polarize: single-click AI code copying, glare reduction, and multi-theme overlays.",
   "permissions": ["activeTab", "scripting", "storage"],
   "action": {
     "default_popup": "src/popup/popup.html",
