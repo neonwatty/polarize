@@ -3,7 +3,7 @@
   "name": "Code Overlay Brightener",
   "version": "0.1",
   "description": "Adds a resizable transparent overlay to help brighten code blocks in YouTube tutorials.",
-  "permissions": ["activeTab", "scripting"],
+  "permissions": ["activeTab", "scripting", "storage"],
   "action": {
     "default_popup": "src/popup/popup.html",
     "default_icon": {

@@ -5,14 +5,9 @@
     body { font-family: sans-serif; padding: 10px; }
     button { margin-top: 5px; display: block; }
     label { display: block; margin-top: 10px; }
+    .input-container { display: flex; align-items: center; gap: 5px; }
+    #toggleVisibility { cursor: pointer; }
   </style>
-
-<!-- Monaco Editor CSS -->
-<link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.26.1/min/vs/editor/editor.main.min.css">
-
-<!-- Monaco Editor Loader -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.26.1/min/vs/loader.min.js"></script>
-
   
 </head>
 <body>
@@ -37,6 +32,18 @@
     Invert Amount:
     <input type="range" id="invertSlider" min="0" max="100" value="0">
   </label>
+
+<h4>API Key Settings</h4>
+<label for="apiKey">Enter your Gemini API Key:</label>
+<div class="input-container">
+  <input type="password" id="apiKey" placeholder="Enter API Key" />
+  <button id="toggleVisibility" type="button">👁️</button>
+
+</div>
+<button id="saveApiKey">Save API Key</button>
+<button id="deleteApiKey">Delete API Key</button>
+
+<p id="status"></p>
 
   <script src="popup.js" type="module"></script>
 

@@ -39,9 +39,63 @@ import {
   createPartFromUri,
 } from '@google/genai';
 
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+// const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
-const ai = new GoogleGenAI({apiKey: GEMINI_API_KEY});
+// const ai = new GoogleGenAI({apiKey: GEMINI_API_KEY});
+
+
+let ai = null;
+
+// Initialize GoogleGenAI dynamically with the user's API key
+function initializeGoogleGenAI(apiKey) {
+  if (!ai || ai.apiKey !== apiKey) {
+    ai = new GoogleGenAI({ apiKey });
+    ai.apiKey = apiKey; // store for future checks
+  }
+}
+
+async function getGeminiApiKey(overlay) {
+  if (!chrome.storage || !chrome.storage.sync) {
+    console.error('chrome.storage.sync is not available in this context.');
+    alert('Storage is not available. Please check your extension permissions.');
+    return null;
+  }
+
+  try {
+    const result = await new Promise((resolve, reject) =>
+      chrome.storage.sync.get('geminiApiKey', (data) => {
+        if (chrome.runtime.lastError) {
+          reject(chrome.runtime.lastError);
+        } else {
+          resolve(data);
+        }
+      })
+    );
+
+    if (!result.geminiApiKey) {
+      console.warn('API key is not set.');
+      if (overlay && overlay._extractBanner) {
+        alert('⚠️ API key is not set. Please set it in the extension settings.');
+        overlay.style.animation = ''; // Stop the animation
+        overlay.style.display = 'block';
+        overlay._extractBtn.style.display = 'block';
+        overlay._extractBanner.style.display = 'none';
+      }
+      return null;
+    }
+
+    return result.geminiApiKey;
+  } catch (error) {
+    console.error('Failed to retrieve API key from storage:', error);
+    alert('❌ Failed to retrieve API key. Please check your extension settings.');
+    overlay.style.animation = ''; // Stop the animation
+    overlay.style.display = 'block';
+    overlay._extractBtn.style.display = 'block';
+    overlay._extractBanner.style.display = 'none';
+    return null;
+  }
+}
+
 
 function extractJsonFromPossibleMarkdown(raw) {
   const trimmed = raw.trim();
@@ -54,12 +108,23 @@ function extractJsonFromPossibleMarkdown(raw) {
     return JSON.parse(jsonStr);
   } catch (e) {
     console.error('❌ Failed to parse JSON:', e);
+    overlay.style.animation = ''; // Stop the animation
+    overlay.style.display = 'block';
+    overlay._extractBtn.style.display = 'block';
+    overlay._extractBanner.style.display = 'none';
     return null;
   }
 }
 
 export async function uploadSnapshot(blob, overlay) {
   try {
+    // get the API key from storage
+    const geminiApiKey = await getGeminiApiKey(overlay);
+    if (!geminiApiKey) return;
+
+    // initialize GoogleGenAI with the API key
+    initializeGoogleGenAI(geminiApiKey);
+
     // package file for upload
     const uploaded = await ai.files.upload({
       file: blob,
@@ -103,13 +168,13 @@ export async function uploadSnapshot(blob, overlay) {
       console.log('✅ Parsed VLM result:', parsed);
       showCodeEditorModal(overlay, parsed.language.toLowerCase(), parsed.code);
     } else {
-      console.warn('⚠️ Invalid or incomplete result:', raw);
-      alert('⚠️ Invalid or incomplete result:', raw);
+      console.warn('⚠️ No source code detected:', raw);
+      alert('⚠️ No source code detected: ' + raw);
     }
     
 
   } catch (err) {
     console.error('Gemini OCR error:', err);
-    alert('Failed to extract code. See console for details.');
+    alert('❌ Failed to upload snapshot. Please check your API key and try again.');
   }
 }
