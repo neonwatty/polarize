@@ -1,4 +1,5 @@
 # Logs
+*.zip
 test-results/
 *.env
 **.DS_Store
