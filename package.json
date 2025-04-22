@@ -10,7 +10,7 @@
     "test": "vitest",
     "test:watch": "vitest --watch",
     "test:ui": "vitest --ui",
-    "test:integration": "playwright test"
+    "test:integration": "npm run build && playwright test"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
