@@ -6,6 +6,8 @@ With a single-click, theme-adjustable overlay, Polarize brightens dark IDEs in v
 
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/j1TMdbrnl_A" frameborder="0" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/j1TMdbrnl_A?modestbranding=1" frameborder="0" allowfullscreen></iframe>
+
 
 Quick links:
 
