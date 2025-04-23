@@ -1,10 +1,15 @@
 import { CodeJar } from 'codejar';
 import hljs from 'highlight.js/lib/core';
 import python from 'highlight.js/lib/languages/python';
+import javascript from 'highlight.js/lib/languages/javascript';
+import ruby from 'highlight.js/lib/languages/ruby';
 // import 'highlight.js/styles/default.css';
 import 'highlight.js/styles/atom-one-dark.css';
 
 hljs.registerLanguage('python', python);
+hljs.registerLanguage('javascript', javascript);
+hljs.registerLanguage('ruby', ruby);
+
 
 function showCodeEditorModal(overlay, language, code) {
   // Create the modal container
@@ -85,7 +90,6 @@ function showCodeEditorModal(overlay, language, code) {
   const jar = CodeJar(editor, highlight);
   
   jar.updateCode(code);
-  console.log("code", code)
 
   // Copy to clipboard functionality
   copyButton.addEventListener('click', () => {
