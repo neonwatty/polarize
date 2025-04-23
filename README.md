@@ -1,6 +1,6 @@
-# Polarize – Enhance YouTube Coding Tutorials
+# Polarize – Accelerate Your Learning From YouTube Coding Tutorials
 
-**Polarize** is an open-source Chrome extension that helps developers learn faster from YouTube programming tutorials.
+**Polarize** is an open-source Chrome extension that helps coders and developers learn faster from YouTube programming tutorials.
 
 With a single-click, theme-adjustable overlay, Polarize brightens dark IDEs in videos, reduces glare, and uses AI to let you copy code straight from the screen.
 
@@ -36,6 +36,8 @@ Quick links:
 ---
 
 ## 🚀 Getting Started (Local Development)
+
+While Polarize is under review in the Chrome Web Store you can try it out locally by following the steps below.
 
 ### 1. Clone the Repository
 
