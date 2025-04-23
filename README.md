@@ -73,9 +73,9 @@ Run interactive tests with:
 npm run test:integration
 ```
 
-## 🔐 AI Code Copying (Gemini API Key Required)
+## 🔐 AI Code Copying
 
-To use the code copying feature, you’ll need a [Google Gemini API key](https://ai.google.dev/gemini-api/docs/api-key).
+To use the code copying feature, at present you’ll need a [Google Gemini API key](https://ai.google.dev/gemini-api/docs/api-key).  Additional cloud or local integration requests are welcome!
 
 Once you have it:
 
