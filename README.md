@@ -12,13 +12,14 @@ Click below to watch a demo! 👇
 
 Quick links:
 
-- [Features](#-features) 
-- [Getting Started (Local Development)](#-getting-started-local-development)
-- [Local Testing](#-local-testing)
-- [AI Code Copying (Gemini API Key Required)](#-ai-code-copying-gemini-api-key-required)
-- [Tech Stack](#-tech-stack)
-- [Contributing](#-contributing)
-- [License](#-license)
+- [✨ Features](#-features)  
+- [🚀 Getting Started – Chrome Extension](#-getting-started--official-chrome-extension)  
+- [🛠️ Local Development Setup](#-getting-started-local-development)  
+- [🧪 Local Testing](#-local-testing)  
+- [🔐 AI Code Copying (Gemini API Key)](#-ai-code-copying-gemini-api-key-required)  
+- [🧩 Tech Stack](#-tech-stack)  
+- [👐 Contributing](#-contributing)  
+- [📄 License](#-license)  
 
 ---
 
@@ -35,7 +36,11 @@ Quick links:
 
 ---
 
-## 🚀 Getting Started (Local Development)
+## 🚀 Getting Started - Chrome Extension
+
+Install the official extension from the [Chrome Store here](https://chromewebstore.google.com/detail/polarize/dngjajbgmgdmdjcckfablmklmmnbnjke?authuser=0&hl=en-GB)!
+
+## 🛠️ Local Development
 
 While Polarize is under review in the Chrome Web Store you can try it out locally by following the steps below.
 
@@ -73,7 +78,7 @@ Run interactive tests with:
 npm run test:integration
 ```
 
-## 🔐 AI Code Copying
+## 🔐 AI Code Copying (Gemini API Key Required)
 
 To use the code copying feature, at present you’ll need a [Google Gemini API key](https://ai.google.dev/gemini-api/docs/api-key).  Additional cloud or local integration requests are welcome!
 
