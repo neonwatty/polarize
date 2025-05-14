@@ -14,7 +14,7 @@ Quick links:
 
 - [✨ Features](#-features)  
 - [🚀 Getting Started – Chrome Extension](#-getting-started---chrome-extension)  
-- [🛠️ Local Development Setup](#-local-development-setup)  
+- [🛠️ Local Development Setup](#local-development-setup)
 - [🧪 Local Testing](#-local-testing)  
 - [🔐 AI Code Copying (Gemini API Key)](#-ai-code-copying-gemini-api-key-required)  
 - [🧩 Tech Stack](#-tech-stack)  
@@ -40,7 +40,7 @@ Quick links:
 
 Install the official extension from the [Chrome Store here](https://chromewebstore.google.com/detail/polarize/dngjajbgmgdmdjcckfablmklmmnbnjke?authuser=0&hl=en-GB)!
 
-## 🛠️ Local Development Setup
+## Local Development Setup
 
 You can try out out and extend a local version of Polarize by following the steps below.
 
