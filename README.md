@@ -6,7 +6,8 @@ With a single-click, theme-adjustable overlay, Polarize brightens dark IDEs in v
 
 Click below to watch a demo! 👇
 
-[![Polarize demo](https://youtu.be/4GJ-CJ7CXxk/maxresdefault.jpg)](https://youtu.be/4GJ-CJ7CXxk)
+[![Polarize demo](https://img.youtube.com/vi/4GJ-CJ7CXxk/maxresdefault.jpg)](https://youtu.be/4GJ-CJ7CXxk)
+
 
 ### [Watch this video on YouTube](https://youtu.be/4GJ-CJ7CXxk)
 
